@@ -13,7 +13,8 @@ fetch("http://localhost:3000/api/products/" + id)
 // Ce résultat json nous le retournons et récupérons sous forme de tableau pour pouvoir l'exploiter et l'afficher.
 .then(function(article) {
     console.table(article);
-    construction(article); 
+    construction(article);
+   
     
 })
 function construction(article){
@@ -79,25 +80,28 @@ bouton.addEventListener("click", function () {
     // Je crée une instance de type classe pour crée un objet du ticket.
     let prix = document.getElementById("price").textContent;
     let nom = document.getElementById("title").textContent;
-    class myticket {
-        constructor (nom, couleur, quantite, prix){
-            this.nom = nom;
-            this.couleur = couleur;
-            this.quantite = quantite;
-            this.prix = prix*quantite;
-        }
-    }
-    let ticket = new myticket(nom, couleur, quantite, prix);
-    console.log(ticket);
+    
     // Le ticket sera envoyé au stockage local et exploité au format JSON.
-    let newTicket = localStorage.getItem(ticket);
-    newTicket = JSON.parse(newTicket);
-    function tickets(){ 
-        console.table(newTicket);
+    let ticket = {
+        id : id,
+        quantite : quantite,
+        couleur : couleur
     }
-    tickets();
-    console.log(tickets)
-
+    console.log(ticket);
+    
+    let local = JSON.parse(localStorage.getItem("tickets"));
+    console.log(local)
+    if (local === null){
+        local = []
+        local.push(ticket)
+        console.log(local)
+        localStorage.setItem("tickets", JSON.stringify(local));
+    }
+    else if (local != null){
+        local.push(ticket)
+        localStorage.setItem("tickets", JSON.stringify(local));
+        findIndex
+    }
 });
 
 

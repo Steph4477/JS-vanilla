@@ -1,4 +1,4 @@
-//La constante id récupère l'id grace à la page de l'url !!!! >>>>> Explication à voir ??? <<<<< 
+// La constante id récupère l'id grace à la page de l'url !!!! 
 const id = new URL(window.location.href).searchParams.get("id");
 // J'affiche l'ID pour la contrôler.
 console.log(id);
@@ -12,11 +12,10 @@ fetch("http://localhost:3000/api/products/" + id)
 })
 // Ce résultat json nous le retournons et récupérons sous forme de tableau pour pouvoir l'exploiter et l'afficher.
 .then(function(article) {
+    construction(article);  
     console.table(article);
-    construction(article);
-   
-    
 })
+
 function construction(article){
     ///////////////////// IMAGE //////////////////////////////////////
     // Je crée une variable qui sélectionne l'emplacement de l'image dans la classe...
@@ -58,54 +57,83 @@ function construction(article){
         option.textContent = article.colors[i];
         // je le met en enfant de l'ID.
         couleurs.appendChild(option);
-    }  
+    }
+    
 };
+
 ///////// EVENEMENT DU BOUTON ET VALIDATION DU TICKET ////////////////////////////////////////
 // Je crée une constante du bouton qui cible l'ID.
 const bouton = document.getElementById("addToCart");
 // Je crée une fonction qui écoute les evenements du bouton.
+function alerteColor(){
+    let couleur = document.querySelector(".item__content__settings__color");
+    let alert = document.createElement("div")
+    let alerte = document.createElement("h3");
+    couleur.appendChild(alert);
+    alert.appendChild(alerte);
+    alerte.textContent = "-- Choisissez une couleur !!! --";
+    alerte = true;
+}
+
+function alerteQuantite(){
+    let couleur = document.querySelector(".item__content__settings__quantity");
+    let alert = document.createElement("div")
+    let alerte = document.createElement("h3"); 
+    couleur.appendChild(alert);
+    alert.appendChild(alerte);
+    alerte.textContent = "-- Choisissez une quantité comprise entre 1 et 100 articles maximum !!! --";
+    alerte = true;
+}
 bouton.addEventListener("click", function () {
     // Je crée des variables variable qui récupère les valeurs sélectionné par le visiteur. 
-    let couleur = document.getElementById("colors").value;
     let quantite = document.getElementById("quantity").value;
     // Je crée des alertes si les valeurs sont mal ou pas remplis.
-    if (couleur === "") {
-        alert("--SVP, choisissez une couleur --");
-        return;
+    let color = document.querySelector("#colors").value;
+    
+    
+    if ((color ==="") && (quantite === "0")){
+        alerteColor();
+        alerteQuantite();
     }
-    if (quantite === "0") {
-        alert("--SVP, choisissez une quantité --");
-        return;
+    else if (color === "") {
+        alerteColor(); 
     }
-    // Je crée une instance de type classe pour crée un objet du ticket.
+    
+    else if (quantite === "0") {
+        alerteQuantite();
+    }
+   
     let prix = document.getElementById("price").textContent;
     let nom = document.getElementById("title").textContent;
     
-    // Le ticket sera envoyé au stockage local et exploité au format JSON.
+    // Je crée le ticket qui sera un objet
     let ticket = {
+        name : nom,
         id : id,
         quantite : quantite,
-        couleur : couleur
+        couleur : color,
+        alerte : false
     }
     console.log(ticket);
-    
+    // je met les tickets dans le localStorage au format JSON.
     let local = JSON.parse(localStorage.getItem("tickets"));
     console.log(local)
+    // Je crée des exeptions et les rentrent dans une variable null.
+    // Si le local est null ajoute le aux tickets
     if (local === null){
-        local = []
-        local.push(ticket)
-        console.log(local)
+        local = [];
+       
+        local.push(ticket);
+       
         localStorage.setItem("tickets", JSON.stringify(local));
     }
+    // Si le locale est différent de null. 
     else if (local != null){
-        local.push(ticket)
+        
+        local.push(ticket);
         localStorage.setItem("tickets", JSON.stringify(local));
-        findIndex
+        // findIndex
     }
+    console.log(local);
+
 });
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//// Ya t-il un moyen pour voir les elements crées en JS dans le html sans passer par console.log ????? //////////////

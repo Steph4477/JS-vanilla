@@ -1,10 +1,17 @@
-// La constante id récupère l'id grace à la page de l'url !!!! 
+// La constante id récupère l'id grâce à la page de l'url 
 const id = new URL(window.location.href).searchParams.get("id");
+
 // J'affiche l'ID pour la contrôler.
 console.log(id);
 // Création d'une requête GET(méthode par défault) pour récupérer les données de la page d'un produit avec son ID.
+let couleur = document.querySelector(".item__content__settings__color");
+let alert = document.createElement("div");
+couleur.appendChild(alert);
 fetch("http://localhost:3000/api/products/" + id)
+
+
 // Récupération du résultat de la requête au format json en verifiant si elle est ok avec (res.ok).
+
 .then(function(res) {
     if (res.ok) {
         return res.json();
@@ -15,7 +22,7 @@ fetch("http://localhost:3000/api/products/" + id)
     construction(article);  
     console.table(article);
 })
-
+console.log(alert);
 function construction(article){
     ///////////////////// IMAGE //////////////////////////////////////
     // Je crée une variable qui sélectionne l'emplacement de l'image dans la classe...
@@ -57,22 +64,14 @@ function construction(article){
         option.textContent = article.colors[i];
         // je le met en enfant de l'ID.
         couleurs.appendChild(option);
-    }
     
-};
-
-///////// EVENEMENT DU BOUTON ET VALIDATION DU TICKET ////////////////////////////////////////
-// Je crée une constante du bouton qui cible l'ID.
-const bouton = document.getElementById("addToCart");
-
+    
+    }
+}
 // Je crée une fonction qui écoute les evenements du bouton.
 function alerteColor(){
-    let couleur = document.querySelector(".item__content__settings__color");
-    let alert = document.createElement("div")
-    let alerte = document.createElement("h3");
-    couleur.appendChild(alert);
-    alert.appendChild(alerte);
-    alerte.textContent = "-- Choisissez une couleur !!! --";   
+    
+    alert.textContent = "-- Choisissez une couleur !!! --";   
 }
 function alerteQuantite(){
     let couleur = document.querySelector(".item__content__settings__quantity");
@@ -83,12 +82,15 @@ function alerteQuantite(){
     alerte.textContent = "-- Choisissez une quantité comprise entre 1 et 100 articles maximum !!! --";  
 }
 
+///////// EVENEMENT DU BOUTON ET VALIDATION DU TICKET ////////////////////////////////////////
+// Je crée une constante du bouton qui cible l'ID.
+const bouton = document.getElementById("addToCart");
 bouton.addEventListener("click", function () {
     // Je crée des variables variable qui récupère les valeurs sélectionné par le visiteur. 
     let quantite = document.getElementById("quantity").value;
     ///////////////////////////    ALERTES   /////////////////////////////////////////////////
     // Je crée des alertes si les valeurs sont mal ou pas remplis.
-    let color = document.querySelector("#colors").value;
+    let color = document.getElementById("colors").value;
     if ((color ==="") && (quantite === "0")){
         alerteColor()
         alerteQuantite()
@@ -102,6 +104,10 @@ bouton.addEventListener("click", function () {
     else if ((quantite >= 100) || (quantite <= 0)) {
         alerteQuantite()
     }
+    else if (color !== "" ) {
+        alert.textContent = ""; 
+    }
+    else if (color != "");
     let prix = document.getElementById("price").textContent;
     let nom = document.getElementById("title").textContent;
     // je met les tickets dans le localStorage au format JSON.
@@ -112,6 +118,7 @@ bouton.addEventListener("click", function () {
         id : id,
         quantite : Number(quantite),
         couleur : color
+       
     }
     // Je crée des exeptions et les rentrent dans une variable null.
     // Si le local est null ajoute le aux tickets
@@ -135,9 +142,9 @@ bouton.addEventListener("click", function () {
         }
     }
     // Si le locale est différent de null. 
-    if (local != null){  
+    /*if (local != null){  
         local.push(ticket);
         localStorage.setItem("tickets", JSON.stringify(local));
-    }
+    }*/
     console.log(local);
 });

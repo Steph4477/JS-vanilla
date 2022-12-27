@@ -6,6 +6,7 @@ console.log(id);
 // Création d'une requête GET(méthode par défault) pour récupérer les données de la page d'un produit avec son ID.
 let couleur = document.querySelector(".item__content__settings__color");
 let alert = document.createElement("div");
+let alertes = document.createElement("div");
 couleur.appendChild(alert);
 fetch("http://localhost:3000/api/products/" + id)
 
@@ -22,7 +23,7 @@ fetch("http://localhost:3000/api/products/" + id)
     construction(article);  
     console.table(article);
 })
-console.log(alert);
+
 function construction(article){
     ///////////////////// IMAGE //////////////////////////////////////
     // Je crée une variable qui sélectionne l'emplacement de l'image dans la classe...
@@ -69,17 +70,17 @@ function construction(article){
     }
 }
 // Je crée une fonction qui écoute les evenements du bouton.
+console.log(alert)
 function alerteColor(){
-    
-    alert.textContent = "-- Choisissez une couleur !!! --";   
+   
+    alert.textContent = "-- Choisissez une couleur --";   
 }
 function alerteQuantite(){
-    let couleur = document.querySelector(".item__content__settings__quantity");
-    let alert = document.createElement("div")
-    let alerte = document.createElement("h3"); 
-    couleur.appendChild(alert);
-    alert.appendChild(alerte);
-    alerte.textContent = "-- Choisissez une quantité comprise entre 1 et 100 articles maximum !!! --";  
+  
+    alert.textContent = "-- Choisissez une quantité comprise entre 1 et 100 articles maximum --";  
+}
+function alerty(){
+    alert.textContent = "-- Choisissez une couleur et choisissez une quantité comprise entre 1 et 100 articles maximum --";
 }
 
 ///////// EVENEMENT DU BOUTON ET VALIDATION DU TICKET ////////////////////////////////////////
@@ -91,24 +92,27 @@ bouton.addEventListener("click", function () {
     ///////////////////////////    ALERTES   /////////////////////////////////////////////////
     // Je crée des alertes si les valeurs sont mal ou pas remplis.
     let color = document.getElementById("colors").value;
-    if ((color ==="") && (quantite === "0")){
+    if (color !== "" ) {
+        alert.textContent = "";
+        
+    }
+    if (quantite !== "0") {
+        alert.textContent =  ""; 
+        
+    }
+    if (color === ""){
         alerteColor()
+        
+    }
+    if (quantite === "0"){
         alerteQuantite()
+        
     }
-    else if (color === "") {
-        alerteColor()
-    }
-    else if (quantite === 0) {
-        alerteQuantite()
-    }
-    else if ((quantite >= 100) || (quantite <= 0)) {
-        alerteQuantite()
-    }
-    else if (color !== "" ) {
-        alert.textContent = ""; 
-    }
-    else if (color != "");
-    let prix = document.getElementById("price").textContent;
+    if ((color === "") && (quantite === "0")){
+        alerty() 
+        
+    } 
+    let prix = document.getElementById("price").value;
     let nom = document.getElementById("title").textContent;
     // je met les tickets dans le localStorage au format JSON.
     let local = JSON.parse(localStorage.getItem("tickets"));

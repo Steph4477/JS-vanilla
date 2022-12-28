@@ -9,10 +9,7 @@ let alert = document.createElement("div");
 let alertes = document.createElement("div");
 couleur.appendChild(alert);
 fetch("http://localhost:3000/api/products/" + id)
-
-
 // Récupération du résultat de la requête au format json en verifiant si elle est ok avec (res.ok).
-
 .then(function(res) {
     if (res.ok) {
         return res.json();
@@ -23,7 +20,6 @@ fetch("http://localhost:3000/api/products/" + id)
     construction(article);  
     console.table(article);
 })
-
 function construction(article){
     ///////////////////// IMAGE //////////////////////////////////////
     // Je crée une variable qui sélectionne l'emplacement de l'image dans la classe...
@@ -65,24 +61,17 @@ function construction(article){
         option.textContent = article.colors[i];
         // je le met en enfant de l'ID.
         couleurs.appendChild(option);
-    
-    
     }
 }
-// Je crée une fonction qui écoute les evenements du bouton.
-console.log(alert)
 function alerteColor(){
-   
     alert.textContent = "-- Choisissez une couleur --";   
 }
 function alerteQuantite(){
-  
     alert.textContent = "-- Choisissez une quantité comprise entre 1 et 100 articles maximum --";  
 }
 function alerty(){
     alert.textContent = "-- Choisissez une couleur et choisissez une quantité comprise entre 1 et 100 articles maximum --";
 }
-
 ///////// EVENEMENT DU BOUTON ET VALIDATION DU TICKET ////////////////////////////////////////
 // Je crée une constante du bouton qui cible l'ID.
 const bouton = document.getElementById("addToCart");
@@ -92,26 +81,6 @@ bouton.addEventListener("click", function () {
     ///////////////////////////    ALERTES   /////////////////////////////////////////////////
     // Je crée des alertes si les valeurs sont mal ou pas remplis.
     let color = document.getElementById("colors").value;
-    if (color !== "" ) {
-        alert.textContent = "";
-        
-    }
-    if (quantite !== "0") {
-        alert.textContent =  ""; 
-        
-    }
-    if (color === ""){
-        alerteColor()
-        
-    }
-    if (quantite === "0"){
-        alerteQuantite()
-        
-    }
-    if ((color === "") && (quantite === "0")){
-        alerty() 
-        
-    } 
     let prix = document.getElementById("price").value;
     let nom = document.getElementById("title").textContent;
     // je met les tickets dans le localStorage au format JSON.
@@ -121,34 +90,49 @@ bouton.addEventListener("click", function () {
         name : nom,
         id : id,
         quantite : Number(quantite),
-        couleur : color
-       
+        couleur : color 
     }
     // Je crée des exeptions et les rentrent dans une variable null.
     // Si le local est null ajoute le aux tickets
-    if (local === null){
-        local = [];
-        local.push(ticket);
-        localStorage.setItem("tickets", JSON.stringify(local));
-    }
-    else{
-        // Si la variable recherche à le même id et la même couleur qu'un ticket présent.
-        let recherche = local.find(element => element.id == ticket.id && element.couleur == ticket.couleur);
-        // Si pas definit, crée un nouveau ticket.
-        if (recherche == undefined){
+    function gestionlocalStorage (){
+        if (local === null){
+            local = [];
             local.push(ticket);
             localStorage.setItem("tickets", JSON.stringify(local));
         }
-        // Sinon rajoute la quantité.
-        else { 
-            recherche.quantite += ticket.quantite;
-            localStorage.setItem("tickets", JSON.stringify(local));
+        else{
+            // Si la variable recherche à le même id et la même couleur qu'un ticket présent.
+            let recherche = local.find(element => element.id == ticket.id && element.couleur == ticket.couleur);
+            // Si pas definit, crée un nouveau ticket.
+            if (recherche == undefined){
+                local.push(ticket);
+                localStorage.setItem("tickets", JSON.stringify(local));
+            }
+            // Sinon rajoute la quantité.
+            else { 
+                recherche.quantite += ticket.quantite;
+                localStorage.setItem("tickets", JSON.stringify(local));
+            }
         }
     }
-    // Si le locale est différent de null. 
-    /*if (local != null){  
-        local.push(ticket);
-        localStorage.setItem("tickets", JSON.stringify(local));
-    }*/
+    gestionlocalStorage ();
+    function gestionAlertes () {
+        if (color !== "" ) {
+            alert.textContent = "";  
+        }
+        if (quantite !== "0") {
+            alert.textContent =  "";   
+        }
+        if (color === ""){
+            alerteColor()   
+        }
+        if (quantite === "0"){
+            alerteQuantite()   
+        }
+        if ((color === "") && (quantite === "0")){
+            alerty()
+        }      
+    }
+    gestionAlertes ();
     console.log(local);
 });

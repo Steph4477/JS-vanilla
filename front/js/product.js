@@ -63,15 +63,6 @@ function construction(article){
         couleurs.appendChild(option);
     }
 }
-function alerteColor(){
-    alert.textContent = "-- Choisissez une couleur --";   
-}
-function alerteQuantite(){
-    alert.textContent = "-- Choisissez une quantité comprise entre 1 et 100 articles maximum --";  
-}
-function alerty(){
-    alert.textContent = "-- Choisissez une couleur et choisissez une quantité comprise entre 1 et 100 articles maximum --";
-}
 ///////// EVENEMENT DU BOUTON ET VALIDATION DU TICKET ////////////////////////////////////////
 // Je crée une constante du bouton qui cible l'ID.
 const bouton = document.getElementById("addToCart");
@@ -115,8 +106,16 @@ bouton.addEventListener("click", function () {
             }
         }
     }
-    gestionlocalStorage ();
     function gestionAlertes () {
+        function alerteColor(){
+            alert.textContent = "-- Choisissez une couleur --";   
+        }
+        function alerteQuantite(){
+            alert.textContent = "-- Choisissez une quantité comprise entre 1 et 100 articles maximum --";  
+        }
+        function alerty(){
+            alert.textContent = "-- Choisissez une couleur et choisissez une quantité comprise entre 1 et 100 articles maximum --";
+        }
         if (color !== "" ) {
             alert.textContent = "";  
         }
@@ -133,6 +132,7 @@ bouton.addEventListener("click", function () {
             alerty()
         }      
     }
+    gestionlocalStorage ();
     gestionAlertes ();
     console.log(local);
 });

@@ -20,6 +20,7 @@ fetch("http://localhost:3000/api/products/" + id)
     construction(article);  
     console.table(article);
 })
+// Construction du detail du produit.
 function construction(article){
     ///////////////////// IMAGE //////////////////////////////////////
     // Je crée une variable qui sélectionne l'emplacement de l'image dans la classe...
@@ -72,7 +73,6 @@ bouton.addEventListener("click", function () {
     ///////////////////////////    ALERTES   /////////////////////////////////////////////////
     // Je crée des alertes si les valeurs sont mal ou pas remplis.
     let color = document.getElementById("colors").value;
-    let prix = document.getElementById("price").value;
     let nom = document.getElementById("title").textContent;
     // je met les tickets dans le localStorage au format JSON.
     let local = JSON.parse(localStorage.getItem("tickets"));
@@ -83,9 +83,8 @@ bouton.addEventListener("click", function () {
         quantite : Number(quantite),
         couleur : color 
     }
-    // Je crée des exeptions et les rentrent dans une variable null.
-    // Si le local est null ajoute le aux tickets
-    function gestionlocalStorage (){
+    
+    function gestionLocalStorage (){
         if (local === null){
             local = [];
             local.push(ticket);
@@ -132,7 +131,7 @@ bouton.addEventListener("click", function () {
             alerty()
         }      
     }
-    gestionlocalStorage ();
+    gestionLocalStorage ();
     gestionAlertes ();
     console.log(local);
 });

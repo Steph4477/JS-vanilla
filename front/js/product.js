@@ -105,33 +105,32 @@ bouton.addEventListener("click", function () {
             }
         }
     }
-    function gestionAlertes () {
-        function alerteColor(){
-            alert.textContent = "-- Choisissez une couleur --";   
-        }
-        function alerteQuantite(){
-            alert.textContent = "-- Choisissez une quantité comprise entre 1 et 100 articles maximum --";  
-        }
-        function alerty(){
-            alert.textContent = "-- Choisissez une couleur et choisissez une quantité comprise entre 1 et 100 articles maximum --";
-        }
+    function alerte (message) {
+        alert.textContent = message; 
+    }
+    function gestionAlertes () {  
         if (color !== "" ) {
-            alert.textContent = "";  
+           alerte("")
+
         }
         if (quantite !== "0") {
-            alert.textContent =  "";   
+            alerte("")      
         }
+        
         if (color === ""){
-            alerteColor()   
+            alerte("-- Choisissez une couleur --")
         }
-        if (quantite === "0"){
-            alerteQuantite()   
+        if (quantite <= "0" || quantite > "100"){
+            
+            alerte("-- Choisissez une quantité comprise entre 1 et 100 articles maximum --")    
         }
-        if ((color === "") && (quantite === "0")){
-            alerty()
-        }      
+        if (color === "" && quantite === "0"){
+            alerte("-- Choisissez une couleur et choisissez une quantité comprise entre 1 et 100 articles maximum --")
+        } 
+        if (quantite > "0" && quantite < "100" && color !== ""){
+            gestionLocalStorage()
+        }     
     }
-    gestionLocalStorage ();
     gestionAlertes ();
     console.log(local);
 });

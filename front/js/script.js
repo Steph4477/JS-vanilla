@@ -60,7 +60,3 @@ function construction(canape){
     
 };
 console.log("Tous les produits ont été chargés !")
-
-    
-    
-    

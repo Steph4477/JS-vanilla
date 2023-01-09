@@ -7,6 +7,7 @@ console.log(id);
 let couleur = document.querySelector(".item__content__settings__color");
 let alert = document.createElement("div");
 let alertes = document.createElement("div");
+
 couleur.appendChild(alert);
 fetch("http://localhost:3000/api/products/" + id)
 // Récupération du résultat de la requête au format json en verifiant si elle est ok avec (res.ok).
@@ -15,6 +16,7 @@ fetch("http://localhost:3000/api/products/" + id)
         return res.json();
     }
 })
+
 // Ce résultat json nous le retournons et récupérons sous forme de tableau pour pouvoir l'exploiter et l'afficher.
 .then(function(article) {
     construction(article);  
@@ -76,14 +78,16 @@ bouton.addEventListener("click", function () {
     let nom = document.getElementById("title").textContent;
     // je met les tickets dans le localStorage au format JSON.
     let local = JSON.parse(localStorage.getItem("tickets"));
+   
     // Je crée le ticket qui sera un objet
     let ticket = {
         name : nom,
         id : id,
         quantite : Number(quantite),
-        couleur : color 
+        couleur : color,
+        
     }
-    
+    console.log(price)
     function gestionLocalStorage (){
         if (local === null){
             local = [];
@@ -120,14 +124,17 @@ bouton.addEventListener("click", function () {
         if (color === ""){
             alerte("-- Choisissez une couleur --")
         }
-        if (quantite <= "0" || quantite > "100"){
+        if (quantite <= "0"){ 
             
+            alerte("-- Choisissez une quantité comprise entre 1 et 100 articles maximum --")    
+        }
+        if (quantite >= 100){ 
             alerte("-- Choisissez une quantité comprise entre 1 et 100 articles maximum --")    
         }
         if (color === "" && quantite === "0"){
             alerte("-- Choisissez une couleur et choisissez une quantité comprise entre 1 et 100 articles maximum --")
         } 
-        if (quantite > "0" && quantite < "100" && color !== ""){
+        if (quantite > "0" && quantite < 100 && color !== ""){
             gestionLocalStorage()
         }     
     }

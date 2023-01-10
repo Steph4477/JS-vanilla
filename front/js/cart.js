@@ -1,4 +1,17 @@
-let produitsPanier = []
+let produitsLs = JSON.parse(localStorage.getItem("tickets"));
+let productsFromApi = []
+
+
+if (!produitsLs) {
+  const titleCart = document.querySelector("h1");
+  const sectionCart = document.querySelector(".cart");
+  titleCart.innerHTML = "Votre panier est vide !";
+  sectionCart.style.display = "none";
+}
+else {
+  Panier();
+}
+
 function Panier() {
   document
     .getElementById("cart__items")
@@ -6,17 +19,17 @@ function Panier() {
   fetch("http://localhost:3000/api/products")
   //Récupère les valeurs de l'API et les retournent en json
   .then((res) => res.json())
-  //Retourne les canapés
+  //Retourne les produits de l'api
   .then(function(api) {
-    produitsPanier = api
-    let tickets = localStorage.getItem("tickets")
-    let ticketsParsed = JSON.parse(tickets)
-    console.log(ticketsParsed)
-    ticketsParsed.forEach(function(tickets) {
+    productsFromApi = api
+    console.log(produitsLs)
+    produitsLs.forEach(function(tickets) {
+      // Je rentre une variable qui va chercher un produit(objet) dans l'api si son ._id coresspond à un .id du panier.
       let produitsApi = api.find((produits) => {
         return produits._id === tickets.id       
       })   
       document.getElementById("cart__items")
+      // Je remplie le panier avec le locale storage si je n'ai pas l'info je cherche dans l'api.
       .innerHTML += `<article class="cart__item" data-id="${tickets.id}" data-color="${tickets.couleur}">
                       <div class="cart__item__img">
                         <img src="${produitsApi.imageUrl}" alt="${produitsApi.altTxt}">
@@ -37,7 +50,9 @@ function Panier() {
                           </div>
                         </div>
                       </div>
-                    </article>` 
+                    </article>`
+      calculTotal();
+
     })  
   })
   //Retourne une erreur dans la console
@@ -45,6 +60,18 @@ function Panier() {
       console.log(error)
   })
 }
-Panier();
+console.log(produitsLs)
+function calculTotal () {
+  let quantite = 0
+  produitsLs.forEach(function(produit) {
+    let produitQuantite = produit.quantite
+    quantite += produitQuantite
+  })
+  console.log(quantite)
+
+  document.getElementById ("totalQuantity")
+  .innerHTML = quantite
+   
+}
 
 

@@ -1,13 +1,11 @@
 // La constante id récupère l'id grâce à la page de l'url 
 const id = new URL(window.location.href).searchParams.get("id");
-
 // J'affiche l'ID pour la contrôler.
 console.log(id);
 // Création d'une requête GET(méthode par défault) pour récupérer les données de la page d'un produit avec son ID.
 let couleur = document.querySelector(".item__content__settings__color");
 let alert = document.createElement("div");
 let alertes = document.createElement("div");
-
 couleur.appendChild(alert);
 fetch("http://localhost:3000/api/products/" + id)
 // Récupération du résultat de la requête au format json en verifiant si elle est ok avec (res.ok).
@@ -16,13 +14,13 @@ fetch("http://localhost:3000/api/products/" + id)
         return res.json();
     }
 })
-
 // Ce résultat json nous le retournons et récupérons sous forme de tableau pour pouvoir l'exploiter et l'afficher.
 .then(function(article) {
     construction(article);  
     console.table(article);
 })
 // Construction du detail du produit.
+// Fonction de création du html, j'aurais pu le faire par interpolation:). 
 function construction(article){
     ///////////////////// IMAGE //////////////////////////////////////
     // Je crée une variable qui sélectionne l'emplacement de l'image dans la classe...
@@ -78,14 +76,12 @@ bouton.addEventListener("click", function () {
     let nom = document.getElementById("title").textContent;
     // je met les tickets dans le localStorage au format JSON.
     let local = JSON.parse(localStorage.getItem("tickets"));
-   
     // Je crée le ticket qui sera un objet
     let ticket = {
         name : nom,
         id : id,
         quantite : Number(quantite),
-        couleur : color,
-        
+        couleur : color,   
     }
     console.log(price)
     function gestionLocalStorage (){
@@ -115,17 +111,14 @@ bouton.addEventListener("click", function () {
     function gestionAlertes () {  
         if (color !== "" ) {
            alerte("")
-
         }
         if (quantite !== "0") {
             alerte("")      
-        }
-        
+        }       
         if (color === ""){
             alerte("-- Choisissez une couleur --")
         }
-        if (quantite <= "0"){ 
-            
+        if (quantite <= "0"){            
             alerte("-- Choisissez une quantité comprise entre 1 et 100 articles maximum --")    
         }
         if (quantite >= 100){ 

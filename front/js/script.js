@@ -18,7 +18,6 @@ fetch("http://localhost:3000/api/products")
         construction(listeObjets[i])
     }
 })
-
 .catch(function(err){
     console.log("erreur survenue")
 });
@@ -56,7 +55,6 @@ function construction(canape){
     // je lui crée sa classe.
     productDescription.classList.add("productDescription");
     // je lui donne sa description en allant la chercher dans l'api.
-    productDescription.textContent = canape.description;
-    
+    productDescription.textContent = canape.description;   
 };
 console.log("Tous les produits ont été chargés !")

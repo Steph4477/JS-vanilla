@@ -6,6 +6,7 @@ console.log(id);
 let couleur = document.querySelector(".item__content__settings__color");
 let alert = document.createElement("div");
 let alertes = document.createElement("div");
+//let price = document.getElementById("price");
 couleur.appendChild(alert);
 fetch("http://localhost:3000/api/products/" + id)
 // Récupération du résultat de la requête au format json en verifiant si elle est ok avec (res.ok).
@@ -76,12 +77,15 @@ bouton.addEventListener("click", function () {
     let nom = document.getElementById("title").textContent;
     // je met les tickets dans le localStorage au format JSON.
     let local = JSON.parse(localStorage.getItem("tickets"));
+    // Je met les tarifs dans le LS pour pouvoir l'exploiter plus tard ...
+    let price = document.getElementById("price").textContent;
     // Je crée le ticket qui sera un objet
     let ticket = {
         name : nom,
         id : id,
         quantite : Number(quantite),
-        couleur : color,   
+        couleur : color,
+        prix : price
     }
     console.log(price)
     function gestionLocalStorage (){

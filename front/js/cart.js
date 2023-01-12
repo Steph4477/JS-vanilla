@@ -1,7 +1,6 @@
 let produitsLs = JSON.parse(localStorage.getItem("tickets"));
 let productsFromApi = []
 
-
 if (!produitsLs) {
   const titleCart = document.querySelector("h1");
   const sectionCart = document.querySelector(".cart");
@@ -51,27 +50,39 @@ function Panier() {
                         </div>
                       </div>
                     </article>`
-      calculTotal();
-
+      calculTotal()
     })  
   })
   //Retourne une erreur dans la console
   .catch((error) => {
-      console.log(error)
+    console.log(error)
   })
 }
-console.log(produitsLs)
+
 function calculTotal () {
-  let quantite = 0
+  // Récupération du total des quantités
+  quantite = 0
   produitsLs.forEach(function(produit) {
     let produitQuantite = produit.quantite
     quantite += produitQuantite
+    prixTotal = 0
   })
-  console.log(quantite)
-
   document.getElementById ("totalQuantity")
   .innerHTML = quantite
-   
+  
+  // Récupération du prix total
+  let itemQuantity = document.getElementsByClassName('itemQuantity');
+  let itemQuantityLength = itemQuantity.length,
+  totalPrice = 0;
+  for (var i = 0; i < itemQuantityLength; ++i) {
+    totalPrice += (itemQuantity[i].value * produitsLs[i].prix);
+  }
+  document.getElementById('totalPrice')
+  .innerHTML = totalPrice;
+  console.log(totalPrice);
 }
+ 
+
+  
 
 

@@ -35,9 +35,9 @@ function Panier() {
                       </div>
                       <div class="cart__item__content">
                         <div class="cart__item__content__description">
-                          <h2>${tickets.name}</h2>
+                          <h2>${produitsApi.name}</h2>
                           <p>${tickets.couleur}</p>
-                          <p>${produitsApi.price}</p>
+                          <p>${produitsApi.price} €</p>
                         </div>
                         <div class="cart__item__content__settings">
                           <div class="cart__item__content__settings__quantity">
@@ -50,7 +50,8 @@ function Panier() {
                         </div>
                       </div>
                     </article>`
-      calculTotal()
+      // Je lance la fonction calcul dans les produits inséré dans le local storage.
+      calcul(produitsLs)
     })  
   })
   //Retourne une erreur dans la console
@@ -59,28 +60,28 @@ function Panier() {
   })
 }
 
-function calculTotal () {
-  // Récupération du total des quantités
-  quantite = 0
-  produitsLs.forEach(function(produit) {
-    let produitQuantite = produit.quantite
-    quantite += produitQuantite
-    prixTotal = 0
+function calcul (localStorage) {
+  let price = 0
+  let quantite = 0
+  // Je vais chercher les elements dans le tableau de l'api à chaque itération
+  productsFromApi.forEach(product => {
+    // J'initialise une boucle a chaque iteration du tableau du localSorage.
+    for (let produitsLs in localStorage) {
+      // Si l'id du tableau du local storage [produitsLs] correspond à l'id d'un produit de l'Api.
+      if(localStorage[produitsLs].id == product._id) {
+      price += product.price * localStorage[produitsLs].quantite
+      quantite += localStorage[produitsLs].quantite
+      }
+    }
   })
-  document.getElementById ("totalQuantity")
-  .innerHTML = quantite
-  
-  // Récupération du prix total
-  let itemQuantity = document.getElementsByClassName('itemQuantity');
-  let itemQuantityLength = itemQuantity.length,
-  totalPrice = 0;
-  for (var i = 0; i < itemQuantityLength; ++i) {
-    totalPrice += (itemQuantity[i].value * produitsLs[i].prix);
-  }
-  document.getElementById('totalPrice')
-  .innerHTML = totalPrice;
-  console.log(totalPrice);
+  document.getElementById("totalPrice")
+  .innerText = price
+  document.getElementById("totalQuantity")
+  .innerText = quantite
 }
+
+
+
  
 
   

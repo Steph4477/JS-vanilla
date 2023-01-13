@@ -74,18 +74,13 @@ bouton.addEventListener("click", function () {
     ///////////////////////////    ALERTES   /////////////////////////////////////////////////
     // Je crée des alertes si les valeurs sont mal ou pas remplis.
     let color = document.getElementById("colors").value;
-    let nom = document.getElementById("title").textContent;
     // je met les tickets dans le localStorage au format JSON.
     let local = JSON.parse(localStorage.getItem("tickets"));
-    // Je met les tarifs dans le LS pour pouvoir l'exploiter plus tard ...
-    let price = document.getElementById("price").textContent;
     // Je crée le ticket qui sera un objet
     let ticket = {
-        name : nom,
         id : id,
         quantite : Number(quantite),
-        couleur : color,
-        prix : price
+        couleur : color
     }
     console.log(price)
     function gestionLocalStorage (){

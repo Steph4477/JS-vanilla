@@ -92,11 +92,11 @@ function suppressionProduit() {
   boutonSupprimer.forEach(bouton => {
     bouton.addEventListener("click", function(e) {
       //Selection de l'element à supprimer en fonction de son id dans le DOM. 
-      let supprimeId = e.target.closest("article").getAttribute("data-id")
+      let dataIdDom = e.target.closest("article").getAttribute("data-id")
       //Selection de l'element à supprimer en fonction de sa couleur dans le DOM.
-      let supprimeCouleur = e.target.closest("article").getAttribute("data-color")
+      let dataColorDom = e.target.closest("article").getAttribute("data-color")
       // Si l'id du localStorage et different de l'id du du DOM ou que la couleur et differente.
-      productsFromLs = productsFromLs.filter( element => element.id !== supprimeId || element.couleur !== supprimeCouleur )
+      productsFromLs = productsFromLs.filter( element => element.id !== dataIdDom || element.couleur !== dataColorDom )
       // Met à jour le localStorage.
       localStorage.setItem("tickets", JSON.stringify(productsFromLs))
       // Supprime l'article.

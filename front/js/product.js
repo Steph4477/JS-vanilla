@@ -6,7 +6,8 @@ console.log(id);
 let couleur = document.querySelector(".item__content__settings__color");
 let alert = document.createElement("div");
 let alertes = document.createElement("div");
-//let price = document.getElementById("price");
+
+// création alerte couleur en enfant de couleur
 couleur.appendChild(alert);
 fetch("http://localhost:3000/api/products/" + id)
 // Récupération du résultat de la requête au format json en verifiant si elle est ok avec (res.ok).
@@ -20,6 +21,7 @@ fetch("http://localhost:3000/api/products/" + id)
     construction(article);  
     console.table(article);
 })
+
 // Construction du detail du produit.
 // Fonction de création du html, j'aurais pu le faire par interpolation:). 
 function construction(article){
@@ -105,7 +107,8 @@ bouton.addEventListener("click", function () {
         }
     }
     function alerte (message) {
-        alert.textContent = message; 
+        alert.textContent = message;
+        setTimeout(alerte, 2000)       
     }
     function gestionAlertes () {  
         if (color !== "" ) {
@@ -128,7 +131,8 @@ bouton.addEventListener("click", function () {
         } 
         if (quantite > "0" && quantite < 100 && color !== ""){
             gestionLocalStorage()
-        }     
+            alerte("-- Kanap ajouté au panier --")         
+        }
     }
     gestionAlertes ();
     console.log(local);

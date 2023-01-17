@@ -105,7 +105,6 @@ function suppressionProduit() {
       alert("Ce produit a bien été supprimé du panier")
       // Recalcul de la quantité
       calculPrixQuantite ()
-      
     })
   })
 }
@@ -128,8 +127,7 @@ function modificationQuantite() {
       // Qu'il mette à jour le localStorage
       localStorage.setItem("tickets", JSON.stringify(productsFromLs))
       alert("Quantité modifié")
-      calculPrixQuantite (productsFromLs)
-      
+      calculPrixQuantite ()     
       // Article supprimé si quantité un 0
       if (productsFromLs[rechercheIndex].quantite == 0){
         e.target.closest("article").remove()

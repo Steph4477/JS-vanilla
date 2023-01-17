@@ -104,7 +104,7 @@ function suppressionProduit() {
       //Alerte produit supprimé.
       alert("Ce produit a bien été supprimé du panier")
       // Recalcul de la quantité
-      calculPrixQuantite (productsFromLs)
+      calculPrixQuantite ()
     })
   })
 }

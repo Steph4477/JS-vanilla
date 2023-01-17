@@ -105,6 +105,7 @@ function suppressionProduit() {
       alert("Ce produit a bien été supprimé du panier")
       // Recalcul de la quantité
       calculPrixQuantite ()
+      
     })
   })
 }
@@ -129,7 +130,13 @@ function modificationQuantite() {
       alert("Quantité modifié")
       calculPrixQuantite (productsFromLs)
       // Article supprimé si quantité un 0
-      if (productsFromLs[rechercheIndex].quantite <= "0"){
+      if (!rechercheIndex){
+        localStorage.removeItem("tickets", JSON.stringify(productsFromLs))
+        e.target.closest("article").remove()
+        titleCart.innerHTML = "Votre panier est vide !"
+        sectionCart.style.display = "none"
+      }
+      if (productsFromLs[rechercheIndex].quantite == 0){
         e.target.closest("article").remove()
       }
     })

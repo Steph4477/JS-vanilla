@@ -1,5 +1,6 @@
 // Création d'une requête GET(méthode par défault) pour récupérer les données.
 fetch("http://localhost:3000/api/products")
+
 // Nous appelons la fonction then() pour récupérer le résultat de la requête au format json en verifiant si elle
 // est ok avec (res.ok).
 .then(function(res) {
@@ -7,6 +8,8 @@ fetch("http://localhost:3000/api/products")
         return res.json()
     }
 })
+
+
 // Ce résultat json nous le retournons et récupérons sous forme de tableau pour pouvoir l'exploiter et l'afficher.
 .then(function(listeObjets) {
     console.table(listeObjets);
@@ -18,9 +21,11 @@ fetch("http://localhost:3000/api/products")
         construction(listeObjets[i])
     }
 })
+
 .catch(function(err){
     console.log("erreur survenue")
 });
+
 // Construction du détail des produits.
 function construction(canape){
     // je crée l'élément "a".

@@ -8,7 +8,6 @@ if (!productsFromLs){
   sectionCart.style.display = "none"
 }
 
-
 else {
   Panier()
 }
@@ -141,63 +140,71 @@ function modificationQuantite() {
         // Qu'il mette à jour le localStorage
         localStorage.setItem("tickets", JSON.stringify(productsFromLs))
         calculPrixQuantite ()     
-      }
-      
+      }      
     })
   })
 }
+
 // fonction de verification des regex, elle renvoie un booléan "true" ou "false" si regex valide ou invalide
 function checkInput(input, msgError, msgOk, regex, idNode) {
-  const errorMessage = document.getElementById(`${idNode}ErrorMsg`);
-  const isValid = regex.test(input.value);
+  const errorMessage = document.getElementById(`${idNode}ErrorMsg`)
+  const isValid = regex.test(input.value)
   
   if (isValid) {
-    errorMessage.style.color = 'white';
-    errorMessage.innerHTML = msgOk;
-    return true;
+    errorMessage.style.color = "white"
+    errorMessage.innerHTML = msgOk
+    return true
   } else {
-    errorMessage.style.color = 'red';
-    errorMessage.innerHTML = msgError;
-    return false;
+    errorMessage.style.color = "red"
+    errorMessage.innerHTML = msgError
+    return false
   }
 }
 
-const firstName = document.getElementById('firstName');
-const lastName = document.getElementById('lastName');
-const address = document.getElementById('address');
-const city = document.getElementById('city');
-const email = document.getElementById('email');
-const order = document.getElementById('order');
+const firstName = document.getElementById("firstName")
+const lastName = document.getElementById("lastName")
+const address = document.getElementById("address")
+const city = document.getElementById("city")
+const email = document.getElementById("email")
+const order = document.getElementById("order")
 
-const nameRegex = /^[a-zA-Z\- ]{3,20}$/;
-const addressRegex = /^[a-zA-Z\- 0-9]{3,100}$/;
-const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+const nameRegex = /^[a-zA-Z\- ]{3,20}$/
+const addressRegex = /^[a-zA-Z\- 0-9]{3,100}$/
+const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
 
-firstName.addEventListener('input', function(e) {
-  checkInput(firstName, 'Prénom invalide', 'Prénom valide', nameRegex, 'firstName');
-});
-lastName.addEventListener('input', function(e) {
-  checkInput(lastName, 'Nom invalide', 'Nom valide', nameRegex, 'lastName');
-});
-address.addEventListener('input', function(e) {
-  checkInput(address, 'Adresse invalide', 'Adresse valide', addressRegex, 'address');
-});
-city.addEventListener('input', function(e) {
-  checkInput(city, 'Ville invalide', 'Ville valide', nameRegex, 'city');
-});
-email.addEventListener('input', function(e) {
-  checkInput(email, 'Email invalide', 'Email valide', emailRegex, 'email');
-});
+firstName.addEventListener("input", function() {
+  checkInput(firstName, "Prénom invalide", "Prénom valide", nameRegex, "firstName")
+})
+lastName.addEventListener("input", function() {
+  checkInput(lastName, "Nom invalide", "Nom valide", nameRegex, "lastName")
+})
+address.addEventListener("input", function() {
+  checkInput(address, "Adresse invalide", "Adresse valide", addressRegex, "address")
+})
+city.addEventListener("input", function() {
+  checkInput(city, "Ville invalide", "Ville valide", nameRegex, "city")
+})
+email.addEventListener("input", function() {
+  checkInput(email, "Email invalide", "Email valide", emailRegex, "email")
+})
 
-order.addEventListener('click', () => {
-  if (checkInput(firstName, 'Prénom invalide', 'Prénom valide', nameRegex, 'firstName') &&
-      checkInput(lastName, 'Nom invalide', 'Nom valide', nameRegex, 'lastName') &&
-      checkInput(address, 'Adresse invalide', 'Adresse valide', addressRegex, 'address') &&
-      checkInput(city, 'Ville invalide', 'Ville valide', nameRegex, 'city') &&
-      checkInput(email, 'Email invalide', 'Email valide', emailRegex, 'email')) {
-    commander();
+order.addEventListener("click", (e) => {
+  e.preventDefault()
+  
+  // Je verifie quand on clique sur le bouton commander que mes checkinput sont "true" si tout est bon, on commande.
+  if (checkInput(firstName, "Prénom invalide", "Prénom valide", nameRegex, "firstName") &&
+      checkInput(lastName, "Nom invalide", "Nom valide", nameRegex, "lastName") &&
+      checkInput(address, "Adresse invalide", "Adresse valide", addressRegex, "address") &&
+      checkInput(city, "Ville invalide", "Ville valide", nameRegex, "city") &&
+      checkInput(email, "Email invalide", "Email valide", emailRegex, "email")) {
+    commander()
+  }else {
+    titleCart.style.color = "red"
+    titleCart.innerHTML = "Formulaire invalide"
+    
+
   }
-});
+})
 
 function commander() {
   // je récupère les données du formulaire dans un objet
@@ -208,42 +215,42 @@ function commander() {
     city: city.value,
     email: email.value,
   }
-  console.log(contact);
+  console.log(contact)
  
-  //Construction d'un array d'id depuis le local storage
-  let products = [];
-  // Dans mon tableau j'insère les id des produits du localStorage ligne par ligne
+  //Construction d"un array d"id depuis le local storage
+  let products = []
+  // Dans mon tableau j"insère les id des produits du localStorage ligne par ligne
   productsFromLs.forEach(product => {
-    products.push(product.id);
-  });
-  console.log(products);
+    products.push(product.id)
+  })
+  console.log(products)
   
   // je mets les données du formulaire et les produits sélectionnés dans le panier, dans un objet...
   const sendFormData = {
     contact,
     products,
-  };
-  console.log(sendFormData);
+  }
+  console.log(sendFormData)
   
-  // j'envoie le formulaire + localStorage (sendFormData) 
-  // ... que j'envoie au serveur
+  // j"envoie le formulaire + localStorage (sendFormData) 
+  // ... que j"envoie au serveur avec la methode "POST"
   const options = {
-    method: 'POST',
+    method: "POST",
     body: JSON.stringify(sendFormData),
     headers: { 
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     }
-  };
+  }
 
   fetch("http://localhost:3000/api/products/order", options)
   .then(response => response.json())
   .then(data => {
-    localStorage.setItem('orderId', data.orderId);
-    // Définit l'URL actuelle de la page Web sur une nouvelle URL, qui est la page de confirmation (confirmation.html) avec une chaîne de requête en annexe. 
-    // la chaîne de requête contient l'ID et la valeur data.orderId. 
-    // data.orderId est une variable qui contient l'ID de commande provenant du localStorage.
-    // L'opérateur + est utilisé pour concaténer la chaîne confirmation.html?id= avec la valeur de la variable data.orderId du localStorage
-    document.location.href = 'confirmation.html?id='+ data.orderId 
+    localStorage.setItem("orderId", data.orderId)
+    // Définit l"URL actuelle de la page Web sur une nouvelle URL, qui est la page de confirmation (confirmation.html) avec une chaîne de requête en annexe. 
+    // la chaîne de requête contient l"ID et la valeur data.orderId. 
+    // data.orderId est une variable qui contient l"ID de commande provenant du localStorage.
+    // L"opérateur + est utilisé pour concaténer la chaîne confirmation.html?id= avec la valeur de la variable data.orderId du localStorage
+    document.location.href = "confirmation.html?id="+ data.orderId 
   })
 } /// fin envoi du formulaire, commande effectuée
 

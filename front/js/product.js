@@ -9,7 +9,6 @@ let alertes = document.createElement("div")
 
 // création alerte couleur en enfant de couleur
 couleur.appendChild(alert)
-
 fetch("http://localhost:3000/api/products/" + id)
 // Récupération du résultat de la requête au format json en verifiant si elle est ok avec (res.ok).
 .then(function(res) {
@@ -102,9 +101,11 @@ bouton.addEventListener("click", function () {
                 local.push(ticket)
                 localStorage.setItem("tickets", JSON.stringify(local))
             }
-         
-            // Sinon rajoute la quantité.
             else { 
+                if (recherche.quantite + ticket.quantite > 100){
+                    alerte("-- Pas plus de 100 articles par produit --")
+                    return
+                }
                 recherche.quantite += ticket.quantite
                 localStorage.setItem("tickets", JSON.stringify(local))
             }
@@ -137,7 +138,7 @@ bouton.addEventListener("click", function () {
         } 
         if (quantite > "0" && quantite < 100 && color !== ""){
             gestionLocalStorage()
-            alerte("-- Kanap ajouté au panier --")         
+                  
         }
     }
     gestionAlertes ()

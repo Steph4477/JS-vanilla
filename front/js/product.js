@@ -1,4 +1,4 @@
-// La constante id récupère l'id grâce à la page de l'url 
+// La constante id récupère l'id grâce à la page de l'url. 
 const id = new URL(window.location.href).searchParams.get("id")
 // J'affiche l'ID pour la contrôler.
 console.log(id)
@@ -7,7 +7,7 @@ let couleur = document.querySelector(".item__content__settings__color")
 let alert = document.createElement("div")
 let alertes = document.createElement("div")
 
-// création alerte couleur en enfant de couleur
+// Création alerte couleur en enfant de couleur.
 couleur.appendChild(alert)
 fetch("http://localhost:3000/api/products/" + id)
 // Récupération du résultat de la requête au format json en verifiant si elle est ok avec (res.ok).
@@ -75,8 +75,6 @@ const bouton = document.getElementById("addToCart")
 bouton.addEventListener("click", function () {
     // Je crée des variables variable qui récupère les valeurs sélectionné par le visiteur. 
     let quantite = document.getElementById("quantity").value
-    ///////////////////////////    ALERTES   /////////////////////////////////////////////////
-    // Je crée des alertes si les valeurs sont mal ou pas remplis.
     let color = document.getElementById("colors").value
     // je met les tickets dans le localStorage au format JSON.
     let local = JSON.parse(localStorage.getItem("tickets"))
@@ -87,60 +85,46 @@ bouton.addEventListener("click", function () {
         couleur : color
     }
     
-    function gestionLocalStorage (){
-        if (local === null){
-            local = []
+    function gestionLocalStorage () {
+        // L'opérateur || (OR) renvoie la première valeur qui est évaluée à true.
+        // La valeur de local si elle existe, sinon la valeur par défaut [].
+        let local = JSON.parse(localStorage.getItem("tickets")) || []
+        // Je cherche dans le tableau "local" un objet qui a les mêmes valeurs pour les propriétés "id" 
+        // et "couleur" que les propriétés "id" et "couleur" de l'objet "ticket". 
+        // Si un tel objet est trouvé, la méthode "find" renvoie ce dernier et l'assigne à la variable 
+        // "existingTicket". 
+        let existingTicket = local.find(t => t.id === ticket.id && t.couleur === ticket.couleur)
+        if (existingTicket) {
+            // Ainsi, en ajoutant ticket.quantite à existingTicket.quantite, 
+            // on incrémente la quantité d'articles du ticket déjà existant dans le local storage.
+            existingTicket.quantite += ticket.quantite
+            if (existingTicket.quantite > 100) {
+                alerte("-- Pas plus de 100 articles par produit --")
+                return
+            }
+        } else {
             local.push(ticket)
-            localStorage.setItem("tickets", JSON.stringify(local))
         }
-        else{
-            // Si la variable recherche à le même id et la même couleur qu'un ticket présent.           
-            let recherche = local.find(element => element.id == ticket.id && element.couleur == ticket.couleur)
-            // Si pas definit, crée un nouveau ticket.
-            if (recherche == undefined){
-                local.push(ticket)
-                localStorage.setItem("tickets", JSON.stringify(local))
-            }
-            else { 
-                if (recherche.quantite + ticket.quantite > 100){
-                    alerte("-- Pas plus de 100 articles par produit --")
-                    return
-                }
-                recherche.quantite += ticket.quantite
-                localStorage.setItem("tickets", JSON.stringify(local))
-            }
-        }
-    }
+        localStorage.setItem("tickets", JSON.stringify(local))
+    }      
 
     function alerte (message) {
-        alert.textContent = message;
+        alert.textContent = message
         setTimeout(alerte, 2000)       
     }
     
-    function gestionAlertes () {  
-        if (color !== "" ) {
-           alerte("")
+    function gestionAlertes() {
+        if (!color) {
+          alerte("-- Choisissez une couleur --")
+          return
         }
-        if (quantite !== "0") {
-            alerte("")      
-        }       
-        if (color === ""){
-            alerte("-- Choisissez une couleur --")
+        if (quantite <= 0 || quantite >= 100) {
+            alerte("-- Choisissez une quantité comprise entre 1 et 100 articles maximum --")
+            return
         }
-        if (quantite <= "0"){            
-            alerte("-- Choisissez une quantité comprise entre 1 et 100 articles maximum --")    
-        }
-        if (quantite >= 100){ 
-            alerte("-- Choisissez une quantité comprise entre 1 et 100 articles maximum --")    
-        }
-        if (color === "" && quantite === "0"){
-            alerte("-- Choisissez une couleur et choisissez une quantité comprise entre 1 et 100 articles maximum --")
-        } 
-        if (quantite > "0" && quantite < 100 && color !== ""){
-            gestionLocalStorage()
-                  
-        }
-    }
+        gestionLocalStorage()
+      }
+      
     gestionAlertes ()
     console.log(local)
 })

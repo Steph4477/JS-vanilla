@@ -15,22 +15,24 @@ else {
 function Panier() {
   document.getElementById("cart__items").innerHTML = ``
  
-  //La méthode fetch() prend en paramètre l'URL de la ressource à récupérer, et renvoie une promesse contenant la réponse du serveur. 
+  // La méthode fetch() prend en paramètre l'URL de la ressource à récupérer, et renvoie une promesse contenant
+  // la réponse du serveur. 
   
   //Permet de récupérer des données d'une api.
   fetch("http://localhost:3000/api/products")
   
-  //Récupère les valeurs de l'API et les retournent à l'aide de la méthode .json()
+  // Récupère les valeurs de l'API et les retourne à l'aide de la méthode .json()
   .then((res) => res.json())
-  //Retourne les produits de l'api
+  // Retourne les produits de l'api.
   .then((api) => {
     productsFromApi = api
     console.log(productsFromLs)
     productsFromLs.forEach((tickets) => {
-      // Je rentre une variable qui va chercher un produit(objet) dans l'api si son ._id coresspond à un .id du panier.
+      // Je rentre une variable qui va chercher un produit(objet) dans l'api si son ._id coresspond à un .id du 
+      // panier.
       let produitsApi = api.find((produits) => produits._id === tickets.id)       
          
-      // Je remplie le panier avec le localeStorage si je n'ai pas l'info je cherche dans l'api.
+      // Je remplis le panier avec le localeStorage si je n'ai pas l'info, je cherche dans l'api.
       document.getElementById("cart__items").innerHTML += `
       <article class="cart__item" data-id="${tickets.id}" data-color="${tickets.couleur}">
         <div class="cart__item__img">
@@ -55,7 +57,7 @@ function Panier() {
       </article>
       `
     
-      // Je lance la fonction calcul dans les produits inséré dans le localStorage.
+      // Je lance la fonction calcul dans les produits insérés dans le localStorage.
       calculPrixQuantite()
       suppressionProduit()
       modificationQuantite()
@@ -69,16 +71,17 @@ function Panier() {
 function calculPrixQuantite () {
   let totalPrice = 0
   let totalQuantity = 0
-  // Je vais chercher les elements dans le tableau de l'api que j'ai besoin.
+  // Je vais chercher les éléments dans le tableau de l'api dont j'ai besoin.
   productsFromApi.forEach(productApi => {
-    // Je vais chercher les elements dans le tableau du localStorage que j'ai besoin.
+    // Je vais chercher les éléments dans le tableau du localStorage dont j'ai besoin.
     productsFromLs.forEach(productLs => {
-      // Si l'id du produit du tableau local storage [productsFromLs] correspond à l'id du produit de l'Api. 
+      // Si l'id du produit du tableau local storage [productsFromLs] corresponds à l'id du produit de l'Api. 
       if(productLs.id == productApi._id) {
-      // Calcule le prix total en multipliant le prix d'un produit par sa quantités et en ajoutant les produits à chaque itération au prix total.
+      // Calcule le prix total en multipliant le prix d'un produit par sa quantité et en ajoutant les produits
+      // à chaque itération au prix total.
       totalPrice += productApi.price * productLs.quantite
       console.log(totalPrice)
-      // Je met le total des quantités en chiffre entier et je l'ajoute à chaque itération.
+      // Je met le total des quantités en chiffres entiers et l'ajoute à chaque itération.
       totalQuantity += parseInt(productLs.quantite)
       console.log(totalQuantity)
       }
@@ -92,17 +95,17 @@ function suppressionProduit() {
   let boutonSupprimer = document.querySelectorAll(".deleteItem")
   boutonSupprimer.forEach(bouton => {
     bouton.addEventListener("click", function(e) {
-      //Selection de l'element à supprimer en fonction de son id dans le DOM. 
+      // Selection de l'élément à supprimer en fonction de son id dans le DOM. 
       let dataIdDom = e.target.closest("article").getAttribute("data-id")
-      //Selection de l'element à supprimer en fonction de sa couleur dans le DOM.
+      // Selection de l'élément à supprimer en fonction de sa couleur dans le DOM.
       let dataColorDom = e.target.closest("article").getAttribute("data-color")
-      // Si l'id du localStorage et different de l'id du du DOM ou que la couleur et differente.
+      // Si l'id du localStorage est différent de l'id du du DOM ou que la couleur est différente.
       productsFromLs = productsFromLs.filter( element => element.id !== dataIdDom || element.couleur !== dataColorDom )
       // Met à jour le localStorage.
       localStorage.setItem("tickets", JSON.stringify(productsFromLs))
       // Supprime l'article.
       e.target.closest("article").remove()
-      //Alerte produit supprimé.
+      // Alerte produit supprimé.
       alert("Ce produit a bien été supprimé du panier")
       // Recalcul de la quantité
       calculPrixQuantite ()
@@ -118,18 +121,18 @@ function modificationQuantite() {
   const modifyQuantity = document.querySelectorAll(".itemQuantity")
   modifyQuantity.forEach(modify => {
     modify.addEventListener("change", function (e) {
-      // Selection de l'élement à modifier en fonction de la valeur en chiffres de son input.
+      // Selection de l'élément à modifier en fonction de la valeur en chiffres de son input.
       const inputQuantityDom = e.target.closest("input").valueAsNumber
       console.log(inputQuantityDom)
       // Je rentre une condition pour que la quantité soit comprise entre 0 et 100 articles.
       if (inputQuantityDom > 0 && inputQuantityDom < 100){
-        // Je cible l'element data-id du DOM.
+        // Je cible l'élément data-id du DOM.
         const dataIdDom = e.target.closest("article").getAttribute("data-id")
-        // Je cible l'élement data-color du DOM.
+        // Je cible l'élément data-color du DOM.
         const dataColorDom = e.target.closest("article").getAttribute("data-color")
         // Je fais un recherche d'index si l'id du localStorage est égale à l'id du DOM et pareil pour la couleur.
         const rechercheIndex = productsFromLs.findIndex((element) => element.id == dataIdDom && element.couleur == dataColorDom)
-        // Je lui dis que la quantité du localStorage doit être égale celle du DOM et je supprime.
+        // Je lui dis que la quantité du localStorage doit être égale à celle du DOM et je supprime.
         productsFromLs[rechercheIndex].quantite = inputQuantityDom
         // Qu'il mette à jour le localStorage.
         localStorage.setItem("tickets", JSON.stringify(productsFromLs))
@@ -162,7 +165,7 @@ const city = document.getElementById("city")
 const email = document.getElementById("email")
 const order = document.getElementById("order")
 
-const nameRegex = /^[a-zA-Z\- ]{3,20}$/
+const nameRegex = /^[A-ZÀ-ÿ][A-Za-zÀ-ÿ'-]+$/
 const addressRegex = /^[a-zA-Z\- 0-9]{3,100}$/
 const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
 
@@ -184,7 +187,8 @@ email.addEventListener("input", function() {
 
 order.addEventListener("click", (e) => {
   e.preventDefault()
-  // Je verifie quand on clique sur le bouton commander que mes inputs sont bien renseignées par le visiteur("true") si tout est bon, on commande !
+  // Je verifie quand on clique sur le bouton commander que mes "inputs" soient bien renseignées par le
+  // visiteur("true") si tout est bon, on commande !
   if (checkInput(firstName, "Prénom invalide", "Prénom valide", nameRegex, "firstName") &&
       checkInput(lastName, "Nom invalide", "Nom valide", nameRegex, "lastName") &&
       checkInput(address, "Adresse invalide", "Adresse valide", addressRegex, "address") &&
@@ -201,7 +205,7 @@ order.addEventListener("click", (e) => {
 })
 
 function commander() {
-  // je récupère les données du formulaire dans un objet
+  // Je récupère les données du formulaire dans un objet.
   const contact = {
     firstName: firstName.value,
     lastName: lastName.value,
@@ -211,9 +215,9 @@ function commander() {
   }
   console.log(contact)
  
-  //Construction d'un array d"id depuis le local storage
+  // Construction d'un array d"id depuis le local storage.
   let products = []
-  // Dans mon tableau j'insère les id des produits du localStorage ligne par ligne
+  // Dans mon tableau j'insère les id des produits du localStorage ligne par ligne.
   productsFromLs.forEach(product => {
     products.push(product.id)
   })
@@ -239,14 +243,12 @@ function commander() {
   fetch("http://localhost:3000/api/products/order", options)
   .then(response => response.json())
   .then(data => {
-    localStorage.setItem("orderId", data.orderId)
-    // Définit l'URL actuelle de la page Web sur une nouvelle URL, qui est la page de confirmation 
-    // (confirmation.html) avec une chaîne de requête en annexe. 
-    // La chaîne de requête contient l'ID et la valeur data.orderId. 
-    // Data.orderId est une variable qui contient l'ID de commande provenant du localStorage.
+    // Définis l'URL actuelle de la page Web sur une nouvelle URL, qui est la page de confirmation 
+    // (confirmation.html) avec une chaîne de requêtes en annexe. 
+    // La chaîne de requêtes contient l'ID et la valeur data.orderId. 
+    // Data.orderId est une variable qui contient l'ID de commande.
     // L'opérateur + est utilisé pour concaténer (mettre en une seule chaine de caractére) 
     // La chaîne confirmation.html?id= 
-    // Avec la valeur de la variable data.orderId du localStorage.
     document.location.href = "confirmation.html?id="+ data.orderId 
   })
 } /// fin envoi du formulaire, commande effectuée

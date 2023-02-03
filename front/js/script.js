@@ -14,7 +14,7 @@ fetch("http://localhost:3000/api/products")
     console.table(listeObjets)
     // Je crée la variable du nombre de canapés du tableau.
     const nombreCanape = listeObjets.length
-    // Je crée la boucle (i= nombre de ligne) tant qu'il reste des lignes continue la boucle.
+    // Je crée la boucle (i= nombre de ligne) tant qu'il reste des lignes, je continue la boucle.
     for ( let i = 0; i <= nombreCanape -1; i++ ){
     //Je lance la fonction construction sur la liste objets et j'incrémente i(nombre de ligne du tableau).      
         construction(listeObjets[i])
@@ -51,13 +51,12 @@ function construction(canape) {
     productName.classList.add("productName")
     // Je donne le texte du titre.
     productName.textContent = canape.name
-    // Création de la déscription.
+    // Création de la description.
     let productDescription = document.createElement("p")
     // Je lui donne sa classe.
     productDescription.classList.add("productDescription")
     // Je lui donne le texte de la description en allant le chercher dans l'api.
     productDescription.textContent = canape.description
-    
     // Ajout des éléments à la page.
     // Je place les enfants de "article".
     objetArticle.appendChild(objetImage)

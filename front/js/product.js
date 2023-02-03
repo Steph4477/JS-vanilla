@@ -1,4 +1,4 @@
-// La constante id récupère l'id grâce à la page de l'url. 
+// La constante id récupère l'id grâce à l'url de la page. 
 const id = new URL(window.location.href).searchParams.get("id")
 // J'affiche l'ID pour la contrôler.
 console.log(id)
@@ -24,7 +24,7 @@ fetch("http://localhost:3000/api/products/" + id)
 })
 
 // Construction du detail du produit.
-// Fonction de création du html, j'aurais pu le faire par interpolation:). 
+// Fonction de création du html, j'aurais pu le faire par interpolation. 
 function construction(article){
     ///////////////////// IMAGE //////////////////////////////////////
     // Je crée une variable qui sélectionne l'emplacement de l'image dans la classe...
@@ -60,7 +60,7 @@ function construction(article){
     for (let i=0; i < article.colors.length; i++) {
         // Je crée une variable qui crée l'élément option.
         let option = document.createElement("option")
-        // j'y attribut la valeur [i].
+        // j'y attribue la valeur [i].
         option.value = article.colors[i]
         // j'y donne son texte.
         option.textContent = article.colors[i]
@@ -73,7 +73,7 @@ function construction(article){
 const bouton = document.getElementById("addToCart")
 
 bouton.addEventListener("click", function () {
-    // Je crée des variables variable qui récupère les valeurs sélectionné par le visiteur. 
+    // Je crée des variables qui récupèrent les valeurs sélectionnées par le visiteur. 
     let quantite = document.getElementById("quantity").value
     let color = document.getElementById("colors").value
     // je met les tickets dans le localStorage au format JSON.
@@ -110,21 +110,28 @@ bouton.addEventListener("click", function () {
 
     function alerte (message) {
         alert.textContent = message
-        setTimeout(alerte, 2000)       
+        setTimeout(alerte, 3000)       
     }
     
-    function gestionAlertes() {
-        if (!color) {
-          alerte("-- Choisissez une couleur --")
-          return
+    function gestionAlertes () {  
+        if (color === ""){
+            alerte("-- Choisissez une couleur --")
         }
-        if (quantite <= 0 || quantite >= 100) {
-            alerte("-- Choisissez une quantité comprise entre 1 et 100 articles maximum --")
-            return
+        if (quantite <= "0"){            
+            alerte("-- Choisissez une quantité comprise entre 1 et 100 articles maximum --")    
         }
-        gestionLocalStorage()
-      }
-      
-    gestionAlertes ()
+        if (quantite >= 100){ 
+            alerte("-- Choisissez une quantité comprise entre 1 et 100 articles maximum --")    
+        }
+        if (color === "" && quantite === "0"){
+            alerte("-- Choisissez une couleur et choisissez une quantité comprise entre 1 et 100 articles maximum --")
+        } 
+        if (quantite > "0" && quantite < 100 && color !== ""){
+            gestionLocalStorage()
+            alerte("-- Kanap ajouté au panier --")         
+        }
+    }
+    
     console.log(local)
+    gestionAlertes()
 })

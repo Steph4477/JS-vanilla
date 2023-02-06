@@ -13,59 +13,91 @@ else {
 }
 
 function Panier() {
-  document.getElementById("cart__items").innerHTML = ``
- 
-  // La méthode fetch() prend en paramètre l'URL de la ressource à récupérer, et renvoie une promesse contenant
-  // la réponse du serveur. 
-  
-  //Permet de récupérer des données d'une api.
+  let cartDom = document.getElementById("cart__items")
   fetch("http://localhost:3000/api/products")
-  
-  // Récupère les valeurs de l'API et les retourne à l'aide de la méthode .json()
-  .then((res) => res.json())
-  // Retourne les produits de l'api.
-  .then((api) => {
-    productsFromApi = api
-    console.log(productsFromLs)
-    productsFromLs.forEach((tickets) => {
-      // Je rentre une variable qui va chercher un produit(objet) dans l'api si son ._id coresspond à un .id du 
-      // panier.
-      let produitsApi = api.find((produits) => produits._id === tickets.id)       
-         
-      // Je remplis le panier avec le localeStorage si je n'ai pas l'info, je cherche dans l'api.
-      document.getElementById("cart__items").innerHTML += `
-      <article class="cart__item" data-id="${tickets.id}" data-color="${tickets.couleur}">
-        <div class="cart__item__img">
-          <img src="${produitsApi.imageUrl}" alt="${produitsApi.altTxt}">
-        </div>
-        <div class="cart__item__content">
-          <div class="cart__item__content__description">
-            <h2>${produitsApi.name}</h2>
-            <p>${tickets.couleur}</p>
-            <p>${produitsApi.price} €</p>
-          </div>
-          <div class="cart__item__content__settings">
-            <div class="cart__item__content__settings__quantity">
-              <p>Qté : </p>
-              <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${tickets.quantite}">
-            </div>
-            <div class="cart__item__content__settings__delete">
-              <p class="deleteItem">Supprimer</p>
-            </div>
-          </div>
-        </div>
-      </article>
-      `
-    
+    .then((res) => res.json())
+    .then((api) => {
+      productsFromApi = api
+      console.log(productsFromLs)
+      productsFromLs.forEach((tickets) => {
+        let produitsApi = api.find((produits) => produits._id === tickets.id)
+        let article = document.createElement("article")
+        article.className = "cart__item"
+        article.setAttribute("data-id", tickets.id)
+        article.setAttribute("data-color", tickets.couleur)
+
+        let imgDiv = document.createElement("div")
+        imgDiv.className = "cart__item__img"
+        article.appendChild(imgDiv)
+
+        let img = document.createElement("img")
+        img.src = produitsApi.imageUrl
+        img.alt = produitsApi.altTxt
+        imgDiv.appendChild(img)
+
+        let contentDiv = document.createElement("div")
+        contentDiv.className = "cart__item__content"
+        article.appendChild(contentDiv)
+        
+        
+        let descriptionDiv = document.createElement("div")
+        descriptionDiv.className = "cart__item__content__description"
+        contentDiv.appendChild(descriptionDiv)
+
+        let h2 = document.createElement("h2")
+        h2.textContent = produitsApi.name
+        descriptionDiv.appendChild(h2)
+        
+
+        let p1 = document.createElement("p")
+        p1.textContent = tickets.couleur
+        descriptionDiv.appendChild(p1)
+
+        let p2 = document.createElement("p")
+        p2.textContent = produitsApi.price + " €"
+        descriptionDiv.appendChild(p2)
+
+        let settingsDiv = document.createElement("div")
+        settingsDiv.className = "cart__item__content__settings"
+        contentDiv.appendChild(settingsDiv)
+
+        let quantityDiv = document.createElement("div")
+        quantityDiv.className = "cart__item__content__settings__quantity"
+        settingsDiv.appendChild(quantityDiv)
+
+        let p3 = document.createElement("p")
+        p3.textContent = "Qté : "
+        quantityDiv.appendChild(p3)
+
+        let input = document.createElement("input")
+        input.type = "number"
+        input.className = "itemQuantity"
+        input.name = "itemQuantity"
+        input.min = "1"
+        input.max = "100"
+        input.value = tickets.quantite
+        quantityDiv.appendChild(input)
+
+        settingsDiv.appendChild(quantityDiv)
+
+        let deleteDiv = document.createElement("div")
+        deleteDiv.className = "cart__item__content__settings__delete"
+
+        let deleteP = document.createElement("p")
+        deleteP.className = "deleteItem"
+        deleteP.textContent = "Supprimer"
+        deleteDiv.appendChild(deleteP)
+
+        settingsDiv.appendChild(deleteDiv)
+        contentDiv.appendChild(settingsDiv)
+        cartDom.appendChild(article)
+      })
+      
       // Je lance la fonction calcul dans les produits insérés dans le localStorage.
       calculPrixQuantite()
       suppressionProduit()
       modificationQuantite()
     })
-  })
-  .catch((error) => {
-    console.log(error)
-  })
 }
 
 function calculPrixQuantite () {
@@ -123,21 +155,22 @@ function modificationQuantite() {
     modify.addEventListener("change", function (e) {
       // Selection de l'élément à modifier en fonction de la valeur en chiffres de son input.
       const inputQuantityDom = e.target.closest("input").valueAsNumber
-      console.log(inputQuantityDom)
-      // Je rentre une condition pour que la quantité soit comprise entre 0 et 100 articles.
-      if (inputQuantityDom > 0 && inputQuantityDom < 100){
-        // Je cible l'élément data-id du DOM.
-        const dataIdDom = e.target.closest("article").getAttribute("data-id")
-        // Je cible l'élément data-color du DOM.
-        const dataColorDom = e.target.closest("article").getAttribute("data-color")
-        // Je fais un recherche d'index si l'id du localStorage est égale à l'id du DOM et pareil pour la couleur.
-        const rechercheIndex = productsFromLs.findIndex((element) => element.id == dataIdDom && element.couleur == dataColorDom)
-        // Je lui dis que la quantité du localStorage doit être égale à celle du DOM et je supprime.
-        productsFromLs[rechercheIndex].quantite = inputQuantityDom
-        // Qu'il mette à jour le localStorage.
-        localStorage.setItem("tickets", JSON.stringify(productsFromLs))
-        calculPrixQuantite ()     
-      }      
+      // Je rentre une condition pour que la quantité soit un entier compris entre 1 et 100.
+      if (!Number.isInteger(inputQuantityDom) || inputQuantityDom <= 0 || inputQuantityDom >= 100) {
+        alert("-- Entrez une quantité entière --")
+        return
+      }
+      // Je cible l'élément data-id du DOM.
+      const dataIdDom = e.target.closest("article").getAttribute("data-id")
+      // Je cible l'élément data-color du DOM.
+      const dataColorDom = e.target.closest("article").getAttribute("data-color")
+      // Je fais un recherche d'index si l'id du localStorage est égale à l'id du DOM et pareil pour la couleur.
+      const rechercheIndex = productsFromLs.findIndex((element) => element.id == dataIdDom && element.couleur == dataColorDom)
+      // Je lui dis que la quantité du localStorage doit être égale à celle du DOM et je supprime.
+      productsFromLs[rechercheIndex].quantite = inputQuantityDom
+      // Qu'il mette à jour le localStorage.
+      localStorage.setItem("tickets", JSON.stringify(productsFromLs))
+      calculPrixQuantite()
     })
   })
 }
